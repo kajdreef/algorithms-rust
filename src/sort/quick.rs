@@ -1,29 +1,33 @@
-pub fn sort(vector: &mut Vec<i64>, lo: usize, hi: usize) {
+pub fn sort<T: PartialOrd>(vector: &mut Vec<T>, lo: usize, hi: usize) {
+    println!("{} {}", lo, hi);
+
     if lo < hi {
         let p = partition(vector, lo, hi);
+        println!("{}", p);
         sort(vector, lo, p - 1);
         sort(vector, p + 1, hi);
     }
 }
 
-fn partition(vector: &mut Vec<i64>, lo: usize, hi: usize) -> usize {
-    let pivot = vector[lo];
+fn partition<T: PartialOrd>(vector: &mut Vec<T>, lo: usize, hi: usize) -> usize {
+    let pivot = hi;
     let mut i = lo;
     let mut j = hi;
 
     loop {
-        while vector[i] < pivot {
-            i = i + 1
+        while vector[i] < vector[pivot] {
+            i = i + 1;
         }
 
-        while vector[j] > pivot {
-            j = j - 1
+        while vector[j] > vector[pivot] {
+            j = j - 1;
         }
 
         if i >= j {
             return j
         }
-        vector.swap(i, j);
+
+        &vector.swap(i, j);
     }
 }
 

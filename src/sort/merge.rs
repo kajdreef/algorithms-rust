@@ -1,12 +1,12 @@
-pub fn sort(vector: &mut Vec<i64>) {
+pub fn sort<T: PartialOrd + Clone>(vector: &mut Vec<T>) {
     let len = vector.len();
-    let mut worker: Vec<i64> = vec![0; len];
+    let mut worker: Vec<T> = Vec::new();
 
     // split vector in two parts
     split(vector, 0, len, & mut worker);
 }
 
-fn split(l1: &mut Vec<i64>, lo: usize, hi: usize, l2: &mut Vec<i64>) {
+fn split<T: PartialOrd + Clone>(l1: &mut Vec<T>, lo: usize, hi: usize, l2: &mut Vec<T>) {
     if (hi - lo) > 1 {
         let mid = lo + (hi - lo) / 2;
 
@@ -17,31 +17,31 @@ fn split(l1: &mut Vec<i64>, lo: usize, hi: usize, l2: &mut Vec<i64>) {
         split(l1, mid, hi, l2);
         
         // merge sides
-        merge(l1, lo, hi, l2);
+        merge(l1.to_vec(), lo, hi, l2);
         
         // copy data to primary vector
         merge_copy(l1, lo, hi, l2);
     }
 }
 
-fn merge(l1: &mut Vec<i64>, lo: usize, hi: usize, l2: &mut Vec<i64>) {
+fn merge<T: PartialOrd + Clone>(l1: Vec<T>, lo: usize, hi: usize, l2: &mut Vec<T>) {
     let mut ptr1 = lo;
     let mid = lo + (hi - lo) / 2;
     let mut ptr2 = mid;
 
     for i in lo..hi {
         if (ptr1 < mid) && (ptr2 >= hi || l1[ptr1] <= l1[ptr2]) {
-            l2[i] = l1[ptr1];
+            l2.insert(i, l1[ptr1].clone());
             ptr1 += 1;
         } else {
-            l2[i] = l1[ptr2];
+            l2.insert(i, l1[ptr2].clone());
             ptr2 += 1;
         }
     }
 }
 
-fn merge_copy(l1: &mut Vec<i64>, lo: usize, hi: usize, l2: &Vec<i64>) {
-    (lo..hi).for_each(|i| l1[i] = l2[i]);
+fn merge_copy<T: PartialOrd + Clone>(l1: &mut Vec<T>, lo: usize, hi: usize, l2: &Vec<T>) {
+    (lo..hi).for_each(|i| l1[i] = l2[i].clone());
 }
 
 #[cfg(test)]

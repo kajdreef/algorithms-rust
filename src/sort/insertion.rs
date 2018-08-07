@@ -1,4 +1,4 @@
-pub fn sort(vector: &mut Vec<i64>) {
+pub fn sort<T: PartialOrd>(vector: &mut Vec<T>) {
     let mut i = 1;
     
     while i < vector.len() {
