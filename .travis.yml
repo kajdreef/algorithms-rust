@@ -1,15 +1,23 @@
-language: rust
-rust:
-  - stable
-  - nightly
+dist: trusty
+sudo: false
 
 matrix:
-  allow_failures:
-    - rust: 
-      - nightly
-      - beta
+  include:
+    # Travis setup for rust
+    - language: rust
+      before_script:
+        - cd rust
+      script:
+        - ./script/run.sh
+    
+    # setup java
+    - language: java
+      jdk: oraclejdk8
+      before_script: 
+        - cd java
+      script:
+        - ./script/run.sh
+
   fast_finish: true
 
-script:
-  - cargo build --verbose --all
-  - cargo test --verbose --all
+
